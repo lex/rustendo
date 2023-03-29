@@ -1,19 +1,20 @@
 use crate::memory::Memory;
+use std::cell::RefCell;
 
 pub struct APU<'a> {
-    pulse_1: u8,                  // Pulse 1 register
-    pulse_2: u8,                  // Pulse 2 register
-    triangle: u8,                 // Triangle register
-    noise: u8,                    // Noise register
-    dmc: u8,                      // DMC register
-    status: u8,                   // APU status register
-    frame_counter: u8,            // Frame counter register
-    memory: &'a Memory,           // Reference to the shared Memory struct
-    audio_buffer: Vec<f32>,       // Audio buffer to store generated audio samples
+    pulse_1: u8,                 // Pulse 1 register
+    pulse_2: u8,                 // Pulse 2 register
+    triangle: u8,                // Triangle register
+    noise: u8,                   // Noise register
+    dmc: u8,                     // DMC register
+    status: u8,                  // APU status register
+    frame_counter: u8,           // Frame counter register
+    memory: &'a RefCell<Memory>, // Reference to the shared Memory struct
+    audio_buffer: Vec<f32>,      // Audio buffer to store generated audio samples
 }
 
 impl<'a> APU<'a> {
-    pub fn new(memory: &'a Memory) -> Self {
+    pub fn new(memory: &'a RefCell<Memory>) -> Self {
         Self {
             pulse_1: 0,
             pulse_2: 0,

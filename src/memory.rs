@@ -1,13 +1,13 @@
 use crate::rom::Rom;
 
 pub struct Memory {
-    ram: [u8; 0x800],                       // 2KB of internal RAM
-    ppu_registers: [u8; 0x08],              // PPU registers
-    apu_and_io_registers: [u8; 0x18],       // APU and I/O registers
-    cartridge_expansion: [u8; 0x1F00],      // Cartridge expansion area
-    cartridge_ram: Vec<u8>,                 // Cartridge RAM
-    cartridge_rom: Vec<u8>,                 // Cartridge ROM (PRG-ROM)
-    cartridge_chr_rom: Vec<u8>,             // Cartridge CHR-ROM
+    ram: [u8; 0x800],                  // 2KB of internal RAM
+    ppu_registers: [u8; 0x08],         // PPU registers
+    apu_and_io_registers: [u8; 0x18],  // APU and I/O registers
+    cartridge_expansion: [u8; 0x1F00], // Cartridge expansion area
+    cartridge_ram: Vec<u8>,            // Cartridge RAM
+    cartridge_rom: Vec<u8>,            // Cartridge ROM (PRG-ROM)
+    cartridge_chr_rom: Vec<u8>,        // Cartridge CHR-ROM
 }
 
 impl Memory {
@@ -48,7 +48,10 @@ impl Memory {
             0x4000..=0x4017 => self.apu_and_io_registers[addr as usize & 0x001F] = value,
             0x4020..=0x5FFF => self.cartridge_expansion[addr as usize - 0x4020] = value,
             0x6000..=0x7FFF => self.cartridge_ram[addr as usize - 0x6000] = value,
-            0x8000..=0xFFFF => panic!("Attempted to write to read-only PRG-ROM at address 0x{:04X}", addr),
+            0x8000..=0xFFFF => panic!(
+                "Attempted to write to read-only PRG-ROM at address 0x{:04X}",
+                addr
+            ),
             _ => panic!("Invalid address: 0x{:04X}", addr),
         }
     }
@@ -57,5 +60,11 @@ impl Memory {
         let lo = self.read_byte(addr) as u16;
         let hi = self.read_byte(addr + 1) as u16;
         hi << 8 | lo
+    }
+
+    pub fn read_word_zero_page(&mut self, addr: u16) -> u16 {
+        let lo = self.read_byte(addr & 0xFF) as u16;
+        let hi = self.read_byte((addr + 1) & 0xFF) as u16;
+        (hi << 8) | lo
     }
 }

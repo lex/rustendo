@@ -1,4 +1,5 @@
 use crate::memory::Memory;
+use std::cell::RefCell;
 
 pub struct PPU<'a> {
     control: u8,
@@ -9,12 +10,12 @@ pub struct PPU<'a> {
     scroll: u8,
     addr: u8,
     data: u8,
-    memory: &'a Memory,
+    memory: &'a RefCell<Memory>,
     screen_buffer: Vec<u8>,
 }
 
 impl<'a> PPU<'a> {
-    pub fn new(memory: &'a Memory) -> Self {
+    pub fn new(memory: &'a RefCell<Memory>) -> Self {
         Self {
             control: 0,
             mask: 0,
