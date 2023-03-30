@@ -36,6 +36,24 @@ impl<'a> CPU<'a> {
         self.pc = self.memory.borrow().read_word(0xFFFC);
     }
 
+    pub fn debug_print(&self) {
+        println!("=== CPU State ===");
+        println!("PC:     {:#06x}", self.pc);
+        println!("A:      {:#04x}", self.a);
+        println!("X:      {:#04x}", self.x);
+        println!("Y:      {:#04x}", self.y);
+        println!("SP:     {:#04x}", self.sp);
+        // println!("Status: {:#010b}", self.status);
+        // println!("  Carry: {}", (self.status & 0b00000001) != 0);
+        // println!("  Zero:  {}", (self.status & 0b00000010) != 0);
+        // println!("  Interrupt Disable: {}", (self.status & 0b00000100) != 0);
+        // println!("  Decimal Mode: {}", (self.status & 0b00001000) != 0);
+        // println!("  Break: {}", (self.status & 0b00010000) != 0);
+        // println!("  Overflow: {}", (self.status & 0b01000000) != 0);
+        // println!("  Negative: {}", (self.status & 0b10000000) != 0);
+        println!("=================");
+    }
+
     fn update_carry_flag(&mut self, value: bool) {
         if value {
             self.status |= 0x01;
@@ -195,6 +213,9 @@ impl<'a> CPU<'a> {
 
     pub fn execute(&mut self) {
         let opcode = self.memory.borrow().read_byte(self.pc);
+        self.debug_print();
+        println!("opcode: {:#02x}", opcode);
+        println!("");
         self.pc += 1;
 
         match opcode {
@@ -960,7 +981,6 @@ impl<'a> CPU<'a> {
                 // DEY (Decrement Y Register)
                 self.y = self.y.wrapping_sub(1);
                 self.update_zero_and_negative_flags(self.y);
-                self.pc += 1;
                 // Add 2 cycles
             }
             0x8A => {
