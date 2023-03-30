@@ -1,7 +1,7 @@
 pub struct Controller {
-    buttons: [bool; 8],           // Button states (A, B, Select, Start, Up, Down, Left, Right)
-    strobe: bool,                 // Strobe state for handling button presses
-    index: usize,                 // Current button index for reading button states in a serial manner
+    buttons: [bool; 8], // Button states (A, B, Select, Start, Up, Down, Left, Right)
+    strobe: bool,       // Strobe state for handling button presses
+    index: usize,       // Current button index for reading button states in a serial manner
 }
 
 impl Controller {

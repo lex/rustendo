@@ -14,11 +14,12 @@ pub struct CPU<'a> {
 
 impl<'a> CPU<'a> {
     pub fn new(memory: &'a RefCell<Memory>) -> Self {
+        println!("{}", memory.borrow().read_word(0xFFFC));
         Self {
             a: 0,
             x: 0,
             y: 0,
-            pc: 0x8000, // This is a common starting address. You should fetch the actual address from the ROM header.
+            pc: memory.borrow().read_word(0xFFFC),
             sp: 0xFD,
             status: 0x24,
             memory,

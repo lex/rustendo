@@ -3,23 +3,16 @@ use std::io::Read;
 use std::path::Path;
 
 pub struct Rom {
-    pub prg_rom: Vec<u8>,    // PRG-ROM (Program ROM) data
-    pub chr_rom: Vec<u8>,    // CHR-ROM (Character ROM) data
-    pub mapper: u8,          // Mapper number
-    pub mirroring: u8,       // Mirroring type
+    pub prg_rom: Vec<u8>, // PRG-ROM (Program ROM) data
+    pub chr_rom: Vec<u8>, // CHR-ROM (Character ROM) data
+    pub mapper: u8,       // Mapper number
+    pub mirroring: u8,    // Mirroring type
 }
 
 impl Rom {
-    pub fn new() -> Self {
-        Self {
-            prg_rom: Vec::new(),
-            chr_rom: Vec::new(),
-            mapper: 0,
-            mirroring: 0,
-        }
-    }
-
-    pub fn load_from_file<P: AsRef<Path>>(file_path: P) -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn load_from_file<P: AsRef<Path>>(
+        file_path: P,
+    ) -> Result<Self, Box<dyn std::error::Error>> {
         let mut file = File::open(file_path)?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
